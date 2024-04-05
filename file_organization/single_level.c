@@ -15,6 +15,18 @@ typedef struct
 File directory[MAX_FILES];
 int nextFileIndex = 0;
 
+int check(char* fileName, char* fileType)
+{
+  for (int i = 0; i < nextFileIndex; i++)
+  {
+    if (strcmp(directory[i].fileName, fileName) == 0
+      && strcmp(directory[i].fileType, fileType) == 0)
+    {
+      return 1;
+    }
+  }
+  return 0;
+}
 void createFile(char* fileName, char* fileType, int fileSize)
 {
   if (nextFileIndex == MAX_FILES)
@@ -70,6 +82,11 @@ int main()
         scanf("%s", &fileType);
         printf("Enter file Size : ");
         scanf("%d", &fileSize);
+        if (check(fileName, fileType) == 1)
+        {
+          printf("Cannot create file : already exists");
+          break;
+        }
         createFile(fileName, fileType, fileSize);
         break;
       }
