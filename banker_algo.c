@@ -36,3 +36,16 @@ void deallocate(int processNo, int resourceNo)
   free(max);
   free(need);
 }
+void inputAllocationVal(int processNo, int resourceNo)
+{
+  for (int i = 0; i < processNo; i++)
+  {
+    for (int j = 0; j < resourceNo; j++)
+    {
+      printf("Input instances of R%d allocated to P%d : ", j, i);
+      scanf("%d", &allocation[i][j]);
+    }
+  }
+
+  printf("\n\n");
+}
