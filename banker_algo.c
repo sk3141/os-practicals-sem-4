@@ -169,5 +169,6 @@ int main()
   {
     printf("P%d\t", safeSequence[i]);
   }
+  deallocate(pNo, rNo);
   return 0;
 }
