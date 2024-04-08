@@ -1,3 +1,4 @@
 #ignore all output screenshots
 output/
 producer-consumer.c
+a.exe

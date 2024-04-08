@@ -56,11 +56,20 @@ int leastFrequent(int frameNo, int newPage)
   for (int i = 0; i < frameNo; i++)
   {
     if (mainMemory[i].holding == -1)
-    {
+    {mainMemory[i].duration++;
       return i;
     }
-    else if (frequencyArray[mainMemory[i].holding] <= frequencyArray[mainMemory[min].holding]){
+    else if (frequencyArray[mainMemory[i].holding] < frequencyArray[mainMemory[min].holding]){
+      mainMemory[i].duration++;
       min = i;
+    }
+    else if (frequencyArray[mainMemory[i].holding] == frequencyArray[mainMemory[min].holding])
+    {
+      mainMemory[i].duration++;
+      if (mainMemory[i].duration > mainMemory[min].duration)
+        min = i;
+      else if (mainMemory[i].duration <= mainMemory[min].duration)
+        continue;
     }
   }
   return min;
