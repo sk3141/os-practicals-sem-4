@@ -6,7 +6,6 @@
 typedef struct
 {
   int holding;
-  int frequency;
   int duration;
 } Frame;
 
@@ -32,7 +31,6 @@ void initialize(int frameNo)
   {
     mainMemory[i].holding = -1;
     mainMemory[i].duration = 0;
-    mainMemory[i].frequency = 0;
   }
   for (int i = 0; i < MAX_STRING_SIZE; i++)
   {
@@ -50,47 +48,69 @@ int checkPage(int frameNo, int nextPage)
   return INT_MIN;
 }
 
-int leastFrequent(int frameNo, int newPage)
+int leastFrequentPage(int frameNo)
 {
-  int min = 0;
+  int index1, index2, minFrequencyIndex;
+  minFrequencyIndex = 0;
+
   for (int i = 0; i < frameNo; i++)
   {
+    index1 = mainMemory[i].holding;
+    index2 = mainMemory[minFrequencyIndex].holding;
     if (mainMemory[i].holding == -1)
-    {mainMemory[i].duration++;
-      return i;
-    }
-    else if (frequencyArray[mainMemory[i].holding] < frequencyArray[mainMemory[min].holding]){
-      mainMemory[i].duration++;
-      min = i;
-    }
-    else if (frequencyArray[mainMemory[i].holding] == frequencyArray[mainMemory[min].holding])
     {
-      mainMemory[i].duration++;
-      if (mainMemory[i].duration > mainMemory[min].duration)
-        min = i;
-      else if (mainMemory[i].duration <= mainMemory[min].duration)
-        continue;
+      minFrequencyIndex = i;
+      return minFrequencyIndex;
+    }
+    else if (frequencyArray[index1] < frequencyArray[index2])
+      minFrequencyIndex = i;
+    else if (frequencyArray[index1] == frequencyArray[index2])
+    {
+      if (mainMemory[i].duration > mainMemory[minFrequencyIndex].duration)
+        minFrequencyIndex = i;
     }
   }
-  return min;
+  return minFrequencyIndex;
+}
+
+void updateDuration(int frameNo)
+{
+  for (int  i = 0; i < frameNo; i++)
+  {
+    if (mainMemory[i].holding != -1)
+      mainMemory[i].duration++;
+  }
+}
+
+void logp(int frameNo)
+{
+  for (int i = 0; i < frameNo; i++)
+  {
+    printf("%d", mainMemory[i].holding);
+  }
+  printf("\n");
 }
 void lfuPageReplacement(int frameNo)
 {
-  int max;
+  int res;
   for (int i = 0; i <= count; i++)
   {
-    if (checkPage(frameNo, inputString[i]) == INT_MIN)
+    int curPage = inputString[i];
+    if (checkPage(frameNo, curPage) == INT_MIN)
     {
-      max = leastFrequent(frameNo, inputString[i]);
-      mainMemory[max].holding = inputString[i];
-      frequencyArray[inputString[i]]++;
       misses++;
-    }
-    else
-    {
+      res = leastFrequentPage(frameNo);
+      mainMemory[res].holding = curPage;
+      mainMemory[res].duration = 0;
       frequencyArray[inputString[i]]++;
-      hits++;
+      updateDuration(frameNo);
+      //logp(frameNo);
+      continue;
     }
+    hits++;
+    frequencyArray[inputString[i]]++;
+    updateDuration(frameNo);
+    //logp(frameNo);
   }
 }
 
