@@ -138,17 +138,6 @@ void bankerAlgo(int processNo, int resourceNo)
   }
 }
 
-/*void displayAllMatrices(int processNo, int ResourceNo)
-{
-  for (int i = 0; i < processNo; i++)
-  {
-    for (int j = 0; j < ResourceNo; j++)
-    {
-      
-    }
-  }
-}*/
-
 int main()
 {
   int pNo, rNo;
