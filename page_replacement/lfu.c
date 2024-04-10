@@ -93,7 +93,7 @@ void logp(int frameNo)
 void lfuPageReplacement(int frameNo)
 {
   int res;
-  for (int i = 0; i <= count; i++)
+  for (int i = 0; i < count; i++)
   {
     int curPage = inputString[i];
     if (checkPage(frameNo, curPage) == INT_MIN)
@@ -104,13 +104,15 @@ void lfuPageReplacement(int frameNo)
       mainMemory[res].duration = 0;
       frequencyArray[inputString[i]]++;
       updateDuration(frameNo);
-      //logp(frameNo);
+      printf("M");
+      logp(frameNo);
       continue;
     }
     hits++;
     frequencyArray[inputString[i]]++;
     updateDuration(frameNo);
-    //logp(frameNo);
+    printf("H");
+    logp(frameNo);
   }
 }
 
@@ -124,7 +126,7 @@ int main()
   initialize(frames);
   lfuPageReplacement(frames);
   printf("No of hits = %d\n", hits);
-  printf("No of misses = %d\n", --misses);
+  printf("No of misses = %d\n", misses);
   return 0;
 }
 // 7 0 2 4 3 1 4 7 2 0 4 3 0 3 2 7
