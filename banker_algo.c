@@ -132,7 +132,8 @@ void bankerAlgo(int processNo, int resourceNo)
     if (res == -1)
     {
       printf("No safe sequence found \n Deadlock has occured\n");
-      return;
+      exit(1);
+      //return;
     }
     safeSequence[curSafe++] = res;
   }
