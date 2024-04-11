@@ -1,130 +1,91 @@
 #include <stdio.h>
 #include <stdlib.h>
-#define FALSE 0
-#define TRUE 1
-#define MAX_BLOCKS 1000
-#define MAX_FILES 100
 
-typedef struct
-{
-  int fileID;
-  int indexBlockID;
-  int fileLength;
-  char fileName[50];
-} File;
+#define MAX_BLOCKS 100
+#define MAX_FILES 10
 
-typedef struct 
-{
-  int BlockID;
-  int blockList[MAX_BLOCKS];
-  int numberOfBlocks;
-} IndexBlock;
+// Structure for file entry
+typedef struct {
+    int start_block; // Starting block of the file
+    int block_count; // Number of blocks occupied by the file
+} FileEntry;
 
-File fileList[MAX_FILES];
-IndexBlock indexBlockList[MAX_FILES];
-int nextIndexBlock = 0;
-int nextFileID = 0;
-int disk[MAX_BLOCKS];
+// Structure for index table entry
+typedef struct {
+    int block; // Block number
+    int file_id; // File ID
+} IndexEntry;
 
-void initialize()
-{
-  for (int i = 0; i < MAX_BLOCKS; i++) { disk[i] = FALSE; }
-  for (int i = 0; i < MAX_FILES; i++)
-  {
-    for (int j = 0; j < MAX_BLOCKS; j++)
-    {
-      indexBlockList[i].blockList[j] = -1;
+FileEntry files[MAX_FILES]; // Array to store file entries
+IndexEntry index_table[MAX_BLOCKS]; // Array to store index table entries
+
+int next_free_block = 0; // Next free block on the disk
+int next_free_file_id = 0; // Next free file ID
+
+// Function to allocate blocks for a file
+int allocate_blocks(int file_id, int block_count) {
+    if (next_free_block + block_count > MAX_BLOCKS) {
+        printf("Error: Not enough free space.\n");
+        return -1;
     }
-  }
-}
-int createFile(char* fileName, int fileLength)
-{
-  if (fileLength > MAX_BLOCKS)
-  {
-    printf("Cannot create file : file size too big\n\n");
-    return -1;
-  }
 
-  if (nextFileID >= MAX_FILES)
-  {
-    printf("Cannot create any more files : Limit reached\n\n");
-    return -1;
-  }
+    files[file_id].start_block = next_free_block;
+    files[file_id].block_count = block_count;
 
-  File newFile;
-  newFile.fileID = nextFileID++;
-  newFile.fileLength = fileLength;
-  newFile.indexBlockID = nextIndexBlock;
-  strcpy(newFile.fileName, fileName);
+    for (int i = 0; i < block_count; i++) {
+        index_table[next_free_block + i].block = next_free_block + i;
+        index_table[next_free_block + i].file_id = file_id;
+    }
 
-  for (int i = 0; i < fileLength; i++)
-  {
-    indexBlockList[nextIndexBlock].blockList[i] = nextIndexBlock + i + 1;
-  }
-  fileList[nextFileID] = newFile;
-  indexBlockList[nextIndexBlock].numberOfBlocks = fileLength;
-  nextIndexBlock += fileLength;
-
-  return newFile.fileID;
+    next_free_block += block_count;
+    return 0;
 }
 
-void displayFiles() {
-    printf("File ID\tFile Name\tSize\tIndex Block ID\n");
-    for (int i = 0; i < nextFileID; i++) {
-        printf("%d\t%s\t\t%d\t%d\n", fileList[i].fileID, fileList[i].fileName, fileList[i].fileLength, fileList[i].indexBlockID);
+// Function to display index table
+void display_index_table() {
+    printf("Index Table:\n");
+    printf("Block\tFile ID\n");
+    for (int i = 0; i < next_free_block; i++) {
+        printf("%d\t%d\n", index_table[i].block, index_table[i].file_id);
     }
 }
 
-void displayIndexBlock(int indexBlockID) {
-    printf("Index Block ID: %d\n", indexBlockID);
-    printf("Block Pointers:\n");
-    for (int i = 0; i < indexBlockList[indexBlockID].numberOfBlocks; i++) {
-        printf("%d -> %d\n", i, indexBlockList[indexBlockID].blockList[i]);
-    }
-}
-
+// Main function
 int main() {
-    initializeIndexBlocks();
+  int choice, file_id, block_count;
 
-    int choice, fileSize, fileID;
-    char fileName[50];
-
-    do {
-        printf("\nIndexed File Allocation Simulation\n");
-        printf("1. Create File\n");
-        printf("2. Display Files\n");
-        printf("3. Display Index Block\n");
-        printf("4. Exit\n");
+  while (1) {
+        printf("\nIndexed File Allocation Menu:\n");
+        printf("1. Allocate blocks for a file\n");
+        printf("2. Display index table\n");
+        printf("3. Exit\n");
         printf("Enter your choice: ");
         scanf("%d", &choice);
 
         switch (choice) {
             case 1:
-                printf("Enter file name: ");
-                scanf("%s", fileName);
-                printf("Enter file size (number of blocks): ");
-                scanf("%d", &fileSize);
-                fileID = createFile(fileName, fileSize);
-                if (fileID != -1) {
-                    printf("File created successfully. File ID: %d\n", fileID);
+                if (next_free_file_id >= MAX_FILES) {
+                    printf("Error: Maximum number of files reached.\n");
+                    break;
+                }
+                printf("Enter number of blocks for the file: ");
+                scanf("%d", &block_count);
+                if (allocate_blocks(next_free_file_id, block_count) == 0) {
+                    printf("Blocks allocated successfully. File ID: %d\n", next_free_file_id);
+                    next_free_file_id++;
                 }
                 break;
             case 2:
-                displayFiles();
+                display_index_table();
                 break;
             case 3:
-                printf("Enter index block ID: ");
-                scanf("%d", &fileID);
-                displayIndexBlock(fileID);
-                break;
-            case 4:
                 printf("Exiting...\n");
-                break;
+                exit(0);
             default:
                 printf("Invalid choice. Please try again.\n");
                 break;
         }
-    } while (choice != 4);
+    }
 
     return 0;
 }
