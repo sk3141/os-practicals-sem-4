@@ -106,7 +106,7 @@ int main()
   inititalize();
   char fileName[50];
   int fileLength, start, choice;
-  printf("Indexed File Allocation\n\n");
+  printf("Linked File Allocation\n\n");
   while (TRUE)
   {
     printf("Choice : 1. Insert file\t 2. Lookup File\t 3.Exit\n\n");
