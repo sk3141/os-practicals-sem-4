@@ -52,10 +52,10 @@ void displayDirectory()
   }
 
   printf("Directory Contents\n");
-  printf("%s%50s%50s\n", "File Name", "File Type", "File Size");
+  printf("%-40s%-40s%-40s\n", "File Name", "File Type", "File Size");
   for (int i = 0; i < nextFileIndex; i++)
   {
-    printf("%s%50s%50d\n", directory[i].fileName, directory[i].fileType, directory[i].fileSize);
+    printf("%-40s%-40s%-40d\n", directory[i].fileName, directory[i].fileType, directory[i].fileSize);
   }
 }
 
