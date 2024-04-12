@@ -61,17 +61,25 @@ void displayDirectory(int uid)
     return;
   }
 
-  printf("Directory Contents\n");
-  printf("%s%50s%50s\n", "File Name", "File Type", "File Size");
+  printf("Directory Contents of UID %d\n", uid);
+  printf("%-40s%-40s%-40s\n", "File Name", "File Type", "File Size");
   for (int i = 0; i < rootDirectory[uid].nextIndex; i++)
   {
-    printf("%s%50s%50d\n", 
+    printf("%-40s%-40s%-40d\n", 
       rootDirectory[uid].fileList[i].fileName, 
       rootDirectory[uid].fileList[i].fileType, 
       rootDirectory[uid].fileList[i].fileSize);
   }
 }
 
+void displayUsers()
+{
+  printf("\n%-40s%-40s\n", "USERS", "NUMBER OF FILES");
+  for (int i = 0; i < nextUID; i++)
+  {
+    printf("U%-39d%-40d\n", i, rootDirectory[i].nextIndex);
+  }
+}
 int main()
 {
   char fileName[50];
@@ -84,7 +92,7 @@ int main()
   
   while(1)
   {
-    printf("Enter choice : 1. New File 2. Display Directory 3. New User 4. Exit\n Choice : ");
+    printf("Enter choice : 1. New File 2. Display Directory 3. New User 4. Display Users 5. Exit\n Choice : ");
     scanf("%d", &choice);
 
     switch (choice)
@@ -125,6 +133,11 @@ int main()
         break;
       }
       case 4:
+      {
+        displayUsers();
+        break;
+      }
+      case 5:
       {
         printf("Program terminated\n");
         return 0;
