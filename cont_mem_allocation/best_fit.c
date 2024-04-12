@@ -115,6 +115,7 @@ int main()
         printf("Enter memory : ");
         scanf("%d", &mem);
         bestAllocate(mem);
+        printf("Process Allocated with process id %d\n", nextPid - 1);
         break;
       }
 

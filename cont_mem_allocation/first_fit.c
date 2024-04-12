@@ -99,11 +99,11 @@ int main()
   int mem;
   int pid;
   initializeMemory();
-  printf("WORST FIT MEMORY ALLOCATION \n\n");
+  printf("FIRST FIT MEMORY ALLOCATION \n\n");
 
   while (TRUE)
   {
-    printf("Enter choice : 1. allocate\t2. deallocate\t3. display\t4. Exit\n Choice : ");
+    printf("Enter choice : 1. allocate\t2. deallocate\t3. display\t4. Exit\nChoice : ");
     scanf("%d", &choice);
 
     switch (choice)
@@ -113,6 +113,7 @@ int main()
         printf("Enter memory : ");
         scanf("%d", &mem);
         firstAllocate(mem);
+        printf("Process allocated with pid %d\n", nextPid - 1);
         break;
       }
 

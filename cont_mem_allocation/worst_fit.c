@@ -106,16 +106,17 @@ int main()
 
   while (TRUE)
   {
-    printf("Enter choice : 1. allocate\t2. deallocate\t3. display\t4. Exit");
+    printf("Enter choice : 1. allocate\t2. deallocate\t3. display\t4. Exit\nChoice : ");
     scanf("%d", &choice);
 
     switch (choice)
     {
       case 1:
       {
-        printf("Enter memory : ");
+        printf("Enter memory Size : ");
         scanf("%d", &mem);
         worstAllocate(mem);
+        printf("Process allocated with pid : %d\n", nextPid - 1);
         break;
       }
 
