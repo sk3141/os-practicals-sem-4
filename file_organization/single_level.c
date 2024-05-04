@@ -105,7 +105,7 @@ int main()
       
       default:
       {
-        printf("Invalud choice \n Program terminated\n");
+        printf("Invalid choice \n Program terminated\n");
         return 0;
       }
     }

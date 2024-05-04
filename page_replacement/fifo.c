@@ -55,6 +55,15 @@ int longestDuration(int frameNo)
   }
   return maxIndex;
 }
+void logp(int frameNo)
+{
+  for (int i = 0; i < frameNo; i++)
+  {
+    printf("%d", mainMemory[i].holding);
+  }
+  printf("\n");
+}
+
 void fifoPageReplacement(int frameNo)
 {
   int max;
@@ -66,9 +75,13 @@ void fifoPageReplacement(int frameNo)
       mainMemory[max].holding = inputString[i];
       mainMemory[max].holdingDuration = 0;
       misses++;
+      printf("M ");
+      logp(frameNo);
     }
     else
       hits++;
+      printf("H ");
+      logp(frameNo);
   }
 }
 

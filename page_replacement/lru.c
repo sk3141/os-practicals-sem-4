@@ -14,6 +14,15 @@ int hits = 0, misses = 0;
 int inputString[MAX_STRING_SIZE];
 int count = 0;
 
+void logp(int frameNo)
+{
+  for (int i = 0; i < frameNo; i++)
+  {
+    printf("%d", mainMemory[i].holding);
+  }
+  printf("\n");
+}
+
 void getInputString()
 {
   do {
@@ -69,11 +78,15 @@ void lruPageReplacement(int frameNo)
       mainMemory[max].holding = inputString[i];
       mainMemory[max].sinceUsed = 0;
       misses++;
+      printf("M ");
+      logp(frameNo);
     }
     else
     {
       mainMemory[checkPage(frameNo, inputString[i])].sinceUsed = 0;
       hits++;
+      printf("H ");
+      logp(frameNo);
     }
     for (int j = 0; j < frameNo; j++)
     {
